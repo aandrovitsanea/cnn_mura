@@ -64,9 +64,7 @@ def data_loader(data_augmentation=False):
     # Data Generator
     print("No data augmentation")
     train_generator = ImageDataGenerator(
-        rescale = 1./255,
-    #     rotation_range = 30,
-    #     horizontal_flip = True
+        rescale = 1./255
         )
     valid_generator = ImageDataGenerator(
         rescale = 1./255
@@ -125,4 +123,4 @@ def data_loader(data_augmentation=False):
                                         1)  
 
     print("Data munging completed")
-    return train, test, bodyparts_train_validation_dict, train_generators, valid_generators, test_generators
+    return train, test, bodyparts, bodyparts_train_validation_dict, train_generators, valid_generators, test_generators
