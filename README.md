@@ -21,6 +21,9 @@ The **outcome** of the project is to feed the model with an image of an X-Ray an
 * Check other architectures
 * Fine tune base model with Keras Tuner
 * Other models for transfer learning
+* Create py files for densenet and resnet models and build them to the notebooks
+* Add cleaned notebooks to repo
+* Write report
 
 ## Exploratory Data Analysis (EDA)
 
