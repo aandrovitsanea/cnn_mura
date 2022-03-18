@@ -19,7 +19,7 @@ The **outcome** of the project is to feed the model with an image of an X-Ray an
 
 
 
-## Exploratory Data Analysys
+## Exploratory Data Analysis (EDA)
 
 The dataset is already split in training and validation set. Training set consists of
 36,808 images (92 %) and the validation set of 3,197 images (8 %). The distribution of these images to the seven types is not homogeneous, since i.e. in the training set we find more X-rays attributed to the shoulder and wrist and very few humerus or forearm X-rays. 
@@ -32,6 +32,8 @@ In all cases of the training set the negative/normal condition of the region are
 ![image](plots/barplot_per_bodypart_train.png)
 
 ![image](plots/barplot_per_bodypart_train.png)
+
+More insight to the data can be found in this [notebook](notebooks/EDA.ipynb).
 
 ## Architectures
 
