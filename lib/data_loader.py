@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-def data_loader(data_augmentation=False):
+def data_loader(data_augmentation): # data_augmentation = "noaugment", "light_augment", "deep_augment"
     import pandas as pd
     import numpy as np
     import matplotlib.pyplot as plt
@@ -62,15 +62,16 @@ def data_loader(data_augmentation=False):
         bodyparts_train_validation_dict[bodypart] = train_validation_bodyparts(bodypart, train,  0.1)
         
     # Data Generator
-    print("No data augmentation")
-    train_generator = ImageDataGenerator(
-        rescale = 1./255
-        )
-    valid_generator = ImageDataGenerator(
-        rescale = 1./255
-        )
-    if data_augmentation==True:
-        print("Doing data augmentation")
+    if data_augmentation == "noaugment":
+        print("No data augmentation")
+        train_generator = ImageDataGenerator(
+            rescale = 1./255
+            )
+        valid_generator = ImageDataGenerator(
+            rescale = 1./255
+            )
+    if data_augmentation == "light_augment":
+        print("Doing a light data augmentation")
         train_generator = ImageDataGenerator(
                 rescale = 1./255,
                 rotation_range = 30,
@@ -79,7 +80,20 @@ def data_loader(data_augmentation=False):
         valid_generator = ImageDataGenerator(
             rescale = 1./255
             )
-        
+    if data_augmentation == "deep_augment":
+        print("Doing a light data augmentation")
+        train_generator = ImageDataGenerator(
+                rescale = 1./255,
+                rotation_range = 30,
+                fill_mode='nearest',
+                horizontal_flip = True,
+                vertical_flip=True,
+                featurewise_center=True,
+                featurewise_std_normalization=True,
+        )
+        valid_generator = ImageDataGenerator(
+            rescale = 1./255
+            )        
     # Per part of the body
 
     def generate_data(df, 
