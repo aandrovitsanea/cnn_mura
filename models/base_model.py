@@ -16,7 +16,7 @@ import pandas as pd
 # import cv2
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import *
-%matplotlib inline
+#%matplotlib inline
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from glob import glob
 import gc
@@ -35,7 +35,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout
-! pip install -q -U keras-tuner
+#! pip install -q -U keras-tuner
 import keras_tuner as kt
 
 import json
@@ -50,7 +50,7 @@ print("Tensorflow version " + tf.__version__)
 
 print("Build model")
 
-def build_model(input_shape,
+def architecture_model(input_shape,
                 conv_layers,
                 conv_activation,
                 conv_dropout,
@@ -122,8 +122,8 @@ def build_model(input_shape,
 
     return model
 
-def build_cnn_model(learning_rate, ): #learning_rate=1e-3
-    model = build_model(input_shape = (320,320,3),
+def build_model(learning_rate): #learning_rate=1e-3
+    model = architecture_model(input_shape = (320,320,3),
                         conv_layers = 4,
                         conv_activation = 'relu',
                         conv_dropout = 0.2,
@@ -144,7 +144,9 @@ print("Train model")
 def train_model(patience,
                 model, 
                 bodypart,
-                epochs): # patience=20, epochs=100
+                epochs,
+                valid_generators,
+                train_generators): # patience=20, epochs=100
     callbacks = tf.keras.callbacks.EarlyStopping(monitor='val_loss', 
                                              patience=patience,
                                              verbose=1)  
@@ -163,30 +165,56 @@ def train_model(patience,
     )
     return history
 
+def eval_func(y_true, y_prob):
+    """
+    A function calculating the different evaluation metrics on the test set.
+    Converts prediction probabilities y_prob to predicted labels y_pred
+    """
+    y_pred = np.array([1 if prob >= 0.5 else 0 for prob in y_prob])
+    y_true = np.array(y_true)
+
+    print(f"Test accuracy: {round(accuracy_score(y_true, y_pred)*100, 2)} %")
+    print(f"Test F1 score: {round(f1_score(y_true, y_pred)*100, 2)} %")
+    print(f"Test Precision score: {round(precision_score(y_true, y_pred)*100, 2)} %")
+    print(f"Test Recall score: {round(recall_score(y_true, y_pred)*100, 2)} %")
+    
+    
+
 def build_train_evaluate(name_model, 
-                         bodyparts, 
+                         bodyparts,
+                         learning_rate,
                          epochs, 
-                         data_augmentation='noaugment'):
+                         patience,
+                         train_generators,
+                         valid_generators,
+                         test_generators,
+                         test,
+                         data_augmentation='noaugment'
+                         ):
     histories = {}
     for bodypart in bodyparts:
         print(bodypart)
         print("\nBuild model\n")
-        model = build_cnn_model()
+        model = build_model(learning_rate)
         print('\nTrain model\n')
         print(bodypart)
-        histories[bodypart] = train_model(model, 
-                                bodypart)
+        histories[bodypart] = train_model(patience,
+                                            model, 
+                                            bodypart,
+                                            epochs,
+                                            valid_generators,
+                                            train_generators)
         print('\nSave training history\n')
-        with open("data/history/history_" + name_model + "_" + str(epochs) + "epochs" + data_augmentation + bodypart + ".json", "w") as file:
+        with open("data/history/history_" + name_model + "_" + str(epochs) + "epochs" + "_" + data_augmentation + "_" + bodypart + ".json", "w") as file:
             json.dump(histories[bodypart].history, file)
         print('\nSave model\n')
-        model.save("data/models/"name_model + "_" + str(epochs) + "epochs" + data_augmentation + bodypart)
-        model.save("data/models/"name_model + "_" + str(epochs) + "epochs" + data_augmentation + bodypart + ".h5")
+        model.save("data/models/" + name_model + "_" + str(epochs) + "epochs" + "_" + data_augmentation + "_" + bodypart)
+        model.save("data/models/" + name_model + "_" + str(epochs) + "epochs" + "_" + data_augmentation + "_" + bodypart + ".h5")
         print('\nEvaluate model\n')
         eval_func(test[test['bodypart'] == bodypart]['class'], 
                         model.predict(test_generators[bodypart]))
         model.evaluate(test_generators[bodypart], verbose=1)
-        print("Delete model")
+        print("\nDelete model")
         clean_up(model)
         
         return histories

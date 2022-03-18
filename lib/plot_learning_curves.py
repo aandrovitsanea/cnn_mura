@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import matplotlib.pyplot as plt
+from matplotlib.pyplot import *
 
 def plot_history(history, 
                  bodypart,
@@ -21,7 +23,7 @@ def plot_history(history,
   matplotlib.rc('ytick', labelsize=16) 
 
   plt.show()
-  plt.savefig('data/plots/accuracy_' + name_model + "_" + str(epochs) + "epochs" + data_augmentation + bodypart + '.png')
+  plt.savefig('data/plots/accuracy_' + name_model + "_" + str(epochs) + "epochs" + "_" + data_augmentation + "_" + bodypart + '.png')
   plt.clf()
     
   fig2  = plt.figure(figsize=(8,4), dpi = 150)
@@ -38,5 +40,5 @@ def plot_history(history,
   matplotlib.rc('xtick', labelsize=16) 
   matplotlib.rc('ytick', labelsize=16) 
   plt.show()
-  plt.savefig('data/plots/loss' + name_model + "_" + str(epochs) + "epochs" + data_augmentation + bodypart + '.png')
+  plt.savefig('data/plots/loss'  + name_model + "_" + str(epochs) + "epochs" + "_" + data_augmentation + "_" + bodypart + '.png')
   plt.clf()
