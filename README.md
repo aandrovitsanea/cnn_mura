@@ -17,7 +17,10 @@ The **outcome** of the project is to feed the model with an image of an X-Ray an
 
 ## TO-DOS
 
-
+* Extract metrics
+* Check other architectures
+* Fine tune base model with Keras Tuner
+* Other models for transfer learning
 
 ## Exploratory Data Analysis (EDA)
 
