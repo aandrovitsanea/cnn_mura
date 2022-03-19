@@ -47,11 +47,7 @@ from sklearn.metrics import classification_report
 # from google.colab import drive
 print("Tensorflow version " + tf.__version__)
 
-
-
-
-
-def model_builder(hp, conv_dropout=True):
+def model_builder_cnn(hp, conv_dropout=True):
 
     #########################################
     ## set hyperparameters for fine tuning ##
@@ -85,6 +81,7 @@ def model_builder(hp, conv_dropout=True):
     ###################
 
     # define the input layer
+    input_shape = (320,320,3)
     input = Input(
         shape=input_shape,
         name='Input'
@@ -147,112 +144,120 @@ def model_builder(hp, conv_dropout=True):
     model.compile(
                   optimizer=optimizer, 
                   loss='binary_crossentropy', 
-                  metrics=['accuracy'])
+                  metrics=['binary_accuracy'])
     
     return model
     
-def tuner_search(max_epochs,
-                hyperband_iterations,
-                directory,
-                project_name,
-                patience,
-                epochs,
-                valid_generators,
-                bodypart,
-                train_generators):
-    print(bodypart)
+def eval_func(y_true, y_prob):
+    """
+    A function calculating the different evaluation metrics on the test set.
+    Converts prediction probabilities y_prob to predicted labels y_pred
+    """
+    y_pred = np.array([1 if prob >= 0.5 else 0 for prob in y_prob])
+    y_true = np.array(y_true)
+
+    print(f"Test accuracy: {round(accuracy_score(y_true, y_pred)*100, 2)} %")
+    print(f"Test F1 score: {round(f1_score(y_true, y_pred)*100, 2)} %")
+    print(f"Test Precision score: {round(precision_score(y_true, y_pred)*100, 2)} %")
+    print(f"Test Recall score: {round(recall_score(y_true, y_pred)*100, 2)} %")
     
+# build tuner to fine-tune the hyper-parameters
+# for the model
+
+def tune_train_best_model(bodypart,
+                          valid_generators,
+                          train_generators,
+                          test):
+    
+
+    print('Start proccess {}.\n'.format(bodypart))
+
+    classes = 2
     tuner = kt.Hyperband(
-                    model_builder,
-                    objective='val_binary_accuracy',
-                    max_epochs=max_epochs,
-                    hyperband_iterations=hyperband_iterations,
-                    directory=directory,
-                    project_name=project_name,
-                    patience,
-                    epochs,
-                    bodypart
-                    )
+                        model_builder_cnn,
+                        objective='val_binary_accuracy',
+                        max_epochs=50,
+                        hyperband_iterations=10,
+                        directory='data/tuner/'+bodypart,
+                        project_name='finetune'
+    )
 
     # define the early stopping
-    stop_early = tf.keras.callbacks.EarlyStopping(monitor='val_binary_accuracy', 
-                                                 patience=patience)
+    stop_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss', 
+                                                  patience=10)
 
     # perfrom search for best parameters
     validation_steps = math.ceil(valid_generators[bodypart].n/ (valid_generators[bodypart].batch_size))
     print("Using validation_steps = %d" % validation_steps)
     steps_per_epoch = math.ceil(train_generators[bodypart].n / (train_generators[bodypart].batch_size))
     print("Using steps_per_epoch = %d" % steps_per_epoch)
-    print("Starting tuner search")
-    
+    print('Tuner search for {}.\n'.format(bodypart))
     tuner.search(train_generators[bodypart],
-                validation_data=valid_generators[bodypart],
-                steps_per_epoch=steps_per_epoch,
-                epochs=epochs, 
-                callbacks=[stop_early])
-
+                  validation_data=valid_generators[bodypart],
+                  validation_steps = validation_steps,
+                  steps_per_epoch=steps_per_epoch,
+                  epochs=100, 
+                  callbacks=[stop_early])
+    
+    tuners[bodypart] = tuner
+    print('Optimal hyperparameters for {}.\n'.format(bodypart))
     # get the optimal hyperparameters
-    best_hps=tuner.get_best_hyperparameters(num_trials=1)[0]
-    print('\nUnits:',best_hps.get('units'), '\nLearning rate:', best_hps.get('learning_rate'), '\nConvolutional blocks:', best_hps.get('conv_blocks'), '\nDropout rate:', best_hps.get('dropout'))    
+    best_hyperparams[bodypart]=tuner.get_best_hyperparameters(num_trials=1)[0]
+#     best_hps=tuner.get_best_hyperparameters(num_trials=1)[0]
+    print('\nUnits:',best_hyperparams[bodypart].get('units'), '\nLearning rate:', best_hyperparams[bodypart].get('learning_rate'), '\nConvolutional blocks:', best_hyperparams[bodypart].get('conv_blocks'), '\nDropout rate:', best_hyperparams[bodypart].get('dropout'))
+    
+#     print('\nUnits:',best_hps.get('units'), '\nLearning rate:', best_hps.get('learning_rate'), '\nConvolutional blocks:', best_hps.get('conv_blocks'), '\nDropout rate:', best_hps.get('dropout'))
 
-    return tuner, best_hps
+    # GET BEST EPOCH
 
+    # build the model with the optimal hyperparameters 
+    # train it on the data for 50 epochs
 
-# find best epoch
-
-def find_best_epoch(best_hps,
-                    patience,
-                    bodypart,
-                    epochs,
-                    train_generators,
-                    valid_generators):
-    print(bodypart)
-    print('Build hypermodel')
-    model = tuner.hypermodel.build(best_hps)
+#     model = tuner.hypermodel.build(best_hps)
+    model = tuner.hypermodel.build(best_hyperparams[bodypart])
+    
     # define the early stopping
-    stop_early = tf.keras.callbacks.EarlyStopping(monitor='val_binary_accuracy', 
-                                                  patience=patience)
+    stop_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss', 
+                                                  patience=10)
+    print('Find best epoch{}.\n'.format(bodypart))
     # perfrom search for best parameters
-    validation_steps = math.ceil(valid_generators[bodypart].n/ (valid_generators[bodypart].batch_size))
-    print("Using validation_steps = %d" % validation_steps)
-    steps_per_epoch = math.ceil(train_generators[bodypart].n / (train_generators[bodypart].batch_size))
-    print("Using steps_per_epoch = %d" % steps_per_epoch)
-    print("Fit model")
     history=model.fit(train_generators[bodypart],
-                        validation_data=valid_generators[bodypart],
-                        steps_per_epoch=steps_per_epoch,
-                        epochs=epochs, 
-                        callbacks=[stop_early])
+                  validation_data=valid_generators[bodypart],
+                  validation_steps = validation_steps,
+                  steps_per_epoch=steps_per_epoch,
+                  epochs=100, 
+                  callbacks=[stop_early])
 
 
     val_acc_per_epoch = history.history['val_accuracy']
-    print("Find best epoch")
     best_epoch = val_acc_per_epoch.index(max(val_acc_per_epoch)) + 1
     print('Best epoch: %d' % (best_epoch))
-    return best_epoch
+    best_epochs[bodypart] = best_epoch
+    # train best model for best epoch
 
-def build_train_best_model(best_hps,
-                           best_epoch,
-                           patience,
-                           bodypart,
-                           train_generators,
-                           valid_generators):
-    print(bodypart)
     # instantiate the hypermodel 
     # train it with the optimal number of epochs
-    stop_early = tf.keras.callbacks.EarlyStopping(monitor='val_binary_accuracy', 
-                                                  patience=patience)
+    print('Train model for with best epoch for {}.\n'.format(bodypart))
     hypermodel = tuner.hypermodel.build(best_hps)
     # plot summary
     hypermodel.summary()
     # retrain the model
-    history    = hypermodel.fit(train_generators[bodypart],
-                            validation_data=valid_generators[bodypart],
-                            steps_per_epoch=steps_per_epoch,
-                            epochs=best_epoch, 
-                            callbacks=[stop_early])
-    return history
-
-
-#############################
-#############################
+    histories_best[bodypart] = hypermodel.fit(train_generators[bodypart],
+                  validation_data=valid_generators[bodypart],
+                  validation_steps = validation_steps,
+                  steps_per_epoch=steps_per_epoch,
+                  epochs=best_epoch, 
+                  callbacks=[stop_early])
+    print('\nSave training history\n')
+    with open("data/history/history_fine_tuned_best_model" + bodypart + ".json", "w") as file:
+            json.dump(histories_best[bodypart].history, file)
+    print('\nSave hypermodel\n')
+    hypermodel.save("data/models/_fine_tuned_best_model" + bodypart)
+    hypermodel.save("data/models/_fine_tuned_best_model" + bodypart + ".h5")
+    print('\nEvaluate hypermodel\n')
+    eval_func(test[test['bodypart'] == bodypart]['class'], 
+                    model.predict(test_generators[bodypart]))
+    hypermodel.evaluate(test_generators[bodypart], verbose=1)
+    print("\nDelete hypermodel")
+    clean_up(hypermodel)        
+    return tuners, best_hyperparams, best_epochs, histories
