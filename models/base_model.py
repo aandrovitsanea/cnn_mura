@@ -43,12 +43,8 @@ import json
 from sklearn.metrics import accuracy_score,f1_score,precision_score,recall_score
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
-# from google.colab import files
-# from google.colab import drive
 print("Tensorflow version " + tf.__version__)
 
-
-print("Build model")
 
 def architecture_model(input_shape,
                 conv_layers,
