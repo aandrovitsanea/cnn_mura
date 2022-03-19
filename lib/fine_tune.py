@@ -151,29 +151,34 @@ def model_builder(hp, conv_dropout=True):
     
     return model
     
-def tuner_search(directory,
-                 project_name,
-                 max_epochs,
-                 hyperband_iterations):
+def tuner_search(max_epochs,
+                hyperband_iterations,
+                directory,
+                project_name,
+                patience,
+                epochs,
+                valid_generators,
+                bodypart,
+                train_generators):
     print(bodypart)
     
     tuner = kt.Hyperband(
                     model_builder,
-                    objective='val_accuracy',
+                    objective='val_binary_accuracy',
                     max_epochs=max_epochs,
                     hyperband_iterations=hyperband_iterations,
                     directory=directory,
                     project_name=project_name,
                     patience,
-                    bodypart,
-                    epochs
+                    epochs,
+                    bodypart
                     )
 
     # define the early stopping
     stop_early = tf.keras.callbacks.EarlyStopping(monitor='val_binary_accuracy', 
                                                  patience=patience)
 
-    perfrom search for best parameters
+    # perfrom search for best parameters
     validation_steps = math.ceil(valid_generators[bodypart].n/ (valid_generators[bodypart].batch_size))
     print("Using validation_steps = %d" % validation_steps)
     steps_per_epoch = math.ceil(train_generators[bodypart].n / (train_generators[bodypart].batch_size))
