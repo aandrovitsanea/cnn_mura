@@ -37,7 +37,7 @@ In all cases of the training set the negative/normal condition of the region are
 
 ![image](plots/barplot_per_bodypart_train.png)
 
-![image](plots/barplot_per_bodypart_train.png)
+![image](plots/barplot_per_bodypart_test.png)
 
 More insight to the data can be found in this [notebook](notebooks/EDA.ipynb).
 
