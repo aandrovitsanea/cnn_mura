@@ -174,7 +174,18 @@ def eval_func(y_true, y_prob):
     print(f"Test Precision score: {round(precision_score(y_true, y_pred)*100, 2)} %")
     print(f"Test Recall score: {round(recall_score(y_true, y_pred)*100, 2)} %")
     
-    
+def eval_func_multi(y_true, y_prob):
+    """
+    A function calculating the different evaluation metrics on the test set.
+    Converts prediction probabilities y_prob to predicted labels y_pred
+    """
+    y_pred = np.array([np.where(prob == prob.max()) for prob in y_prob])
+    y_true = np.array(y_true)
+
+    print(f"Test accuracy: {round(accuracy_score(y_true, y_pred)*100, 2)} %")
+    print(f"Test F1 score: {round(f1_score(y_true, y_pred)*100, 2)} %")
+    print(f"Test Precision score: {round(precision_score(y_true, y_pred)*100, 2)} %")
+    print(f"Test Recall score: {round(recall_score(y_true, y_pred)*100, 2)} %")    
 
 def build_train_evaluate(name_model, 
                          bodyparts,

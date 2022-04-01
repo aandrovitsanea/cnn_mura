@@ -77,8 +77,8 @@ callbacks = tf.keras.callbacks.EarlyStopping(monitor='val_binary_accuracy',
 def train_model(model, 
                 bodypart,
                 valid_generators,
-                train_generators
-                ):
+                train_generators,
+                epochs):
     validation_steps = math.ceil(valid_generators[bodypart].n/ valid_generators[bodypart].batch_size)
     print("Using validation_steps = %d" % validation_steps)
     steps_per_epoch = math.ceil(train_generators[bodypart].n / (train_generators[bodypart].batch_size))
@@ -88,9 +88,55 @@ def train_model(model,
                         validation_data = valid_generators[bodypart],
                         validation_steps = validation_steps,
                         steps_per_epoch = steps_per_epoch,
-                        epochs=100,
+                        epochs=epochs,
                         verbose=1,
                         callbacks=[callbacks]
+    )
+    return history
+
+# add model on top
+def build_model_on_inception_v3_14classes():
+  inception_model = InceptionV3(weights='imagenet',
+                                input_shape = (320,320,3),
+                                include_top = False)
+  inception_model.trainable = False
+  # add new model on top
+  inputs = tf.keras.Input(shape=(320,320,3))
+  x = inception_model(inputs, 
+                    training=False)
+  x = tf.keras.layers.GlobalAveragePooling2D()(x)
+  x = tf.keras.layers.Dropout(0.2)(x)
+  classes=14
+  outputs = tf.keras.layers.Dense(classes, activation='softmax')(x)
+  model = tf.keras.Model(inputs, outputs)
+  model.summary()
+
+  # train the top layer
+  model.compile(optimizer = tf.keras.optimizers.Adam(learning_rate=1e-3),
+                loss = 'sparse_categorical_crossentropy',
+                metrics = ['accuracy'])
+  return model
+
+def train_model_14classes(model, 
+                            valid_generators,
+                            train_generators,
+                            epochs):
+    callbacks3 = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', 
+                                             patience=8,
+                                             restore_best_weights=True)
+    
+    validation_steps = math.ceil(valid_generators.n/ (8*valid_generators.batch_size))
+    print("Using validation_steps = %d" % validation_steps)
+    steps_per_epoch = math.ceil(train_generators.n / (16*train_generators.batch_size))
+    print("Using steps_per_epoch = %d" % steps_per_epoch)
+
+    history = model.fit(train_generators,
+                        validation_data = valid_generators,
+                        validation_steps = validation_steps,
+                        steps_per_epoch = steps_per_epoch,
+                        epochs=epochs,
+                        verbose=1,
+                        callbacks=[callbacks3]
     )
     return history
 
