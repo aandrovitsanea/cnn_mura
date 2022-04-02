@@ -59,13 +59,13 @@ More insights on the data can be found in this [notebook](notebooks/EDA.ipynb).
 
 ![image](plots/xception_architecture.png)
 
+
 ## Evaluation
 
 ### 14 cls approach
 
 In this case each model was trained for all data, in order to identify not only whether the condition is normal or abnormal but also which body part, out of the 7 given the x-ray refers to. Below are the results of all 8 trained models.
 
-![image](plots/evaluation_accuracy_one_model_14classesnormal.png)
 
 |     | name_code                                  |   train_accuracy_eval |   test_accuracy_eval |   valid_accuracy_eval|
 |----:|:-------------------------------------------|----------------------:|---------------------:|----------------------:|
@@ -77,6 +77,11 @@ In this case each model was trained for all data, in order to identify not only 
 |  89 | base_model_all_parts_deep_augment_50epochs |                 64.1  |                57.12 |                 60.8  |
 | 111 | resnet_all_parts_deep_augment_50epochs     |                 19.35 |                15.17 |                 19.33 |
 | 112 | resnet_all_parts_no_augment_50epochs       |                 28.13 |                20.61 |                 27.41 |
+
+
+![image](plots/evaluation_accuracy_one_model_14classesnormal.png)
+
+#### Learning curves for best model
 
 ### Per body part
 
@@ -94,6 +99,15 @@ In this case each classifier is trained for each body part. The tables include t
 
 ![image](plots/evaluation_accuracy_XR_ELBOW.png)
 
+#### Learning curves for best model
+
+
+![image](plots/accuracy_densenet_model_top_70epochs_deep_augment_XR_ELBOW.png)
+
+![image](plots/lossdensenet_model_top_70epochs_deep_augment_XR_ELBOW.png)
+
+
+
 #### Finger
 
 |     | name_code                       | part_body   |    lr |   conv_dropout |   callbacks_patience |   fit_epochs |   ealry_stop_at_epoch |   test_accuracy_eval |   train_accuracy_eval |   valid_accuracy_eval | model_name                                             |
@@ -104,6 +118,10 @@ In this case each classifier is trained for each body part. The tables include t
 |  95 | inception_deep_augment_70epochs | XR_FINGER   | 0.001 |          nan   |                   20 |           70 |                    36 |                68.55 |                 73.93 |                 76.09 | inception_model_top_70epochs_deep_augment_XR_FINGER.h5 |
 
 ![image](plots/evaluation_accuracy_XR_FINGER.png)
+
+#### Learning curves for best model
+
+![image](plots/evaluation_accuracy_XR_WRIST.png)
 
 
 #### Forearm
@@ -117,6 +135,11 @@ In this case each classifier is trained for each body part. The tables include t
 
 ![image](plots/evaluation_accuracy_XR_FOREARM.png)
 
+#### Learning curves for best model
+
+![image](plots/evaluation_accuracy_XR_WRIST.png)
+
+
 #### Hand
 
 |     | name_code                        | part_body   |    lr |   conv_dropout |   callbacks_patience |   fit_epochs |   ealry_stop_at_epoch |   test_accuracy_eval |   train_accuracy_eval |   valid_accuracy_eval | model_name                                           |
@@ -127,6 +150,11 @@ In this case each classifier is trained for each body part. The tables include t
 | 101 | densenet_deep_augment_70epochs   | XR_HAND     | 0.001 |          nan   |                   20 |           70 |                    39 |                64.78 |                 77.36 |                 75.57 | densenet_model_top_70epochs_deep_augment_XR_HAND.h5  |
 
 ![image](plots/evaluation_accuracy_XR_HAND.png)
+
+#### Learning curves for best model
+
+![image](plots/evaluation_accuracy_XR_WRIST.png)
+
 
 #### Humerus
 
@@ -139,6 +167,12 @@ In this case each classifier is trained for each body part. The tables include t
 
 ![image](plots/evaluation_accuracy_XR_HUMERUS.png)
 
+
+#### Learning curves for best model
+
+![image](plots/evaluation_accuracy_XR_WRIST.png)
+
+
 #### Shoulder
 
 |    | name_code                       | part_body   |    lr |   conv_dropout |   callbacks_patience |   fit_epochs |   ealry_stop_at_epoch |   test_accuracy_eval |   train_accuracy_eval |   valid_accuracy_eval | model_name                                               |
@@ -150,6 +184,11 @@ In this case each classifier is trained for each body part. The tables include t
 
 ![image](plots/evaluation_accuracy_XR_SHOULDER.png)
 
+#### Learning curves for best model
+
+![image](plots/evaluation_accuracy_XR_WRIST.png)
+
+
 #### Wrist
 
 |     | name_code                       | part_body   |    lr |   conv_dropout |   callbacks_patience |   fit_epochs |   ealry_stop_at_epoch |   test_accuracy_eval |   train_accuracy_eval |   valid_accuracy_eval | model_name                                            |
@@ -159,6 +198,10 @@ In this case each classifier is trained for each body part. The tables include t
 | 100 | densenet_deep_augment_70epochs  | XR_WRIST    | 0.001 |          nan   |                   20 |           70 |                    39 |                74.36 |                 76.83 |                 76.48 | densenet_model_top_70epochs_deep_augment_XR_WRIST.h5  |
 |  10 | densenet_no_augment_20epochs    | XR_WRIST    | 0.001 |          nan   |                   10 |           20 |                    20 |                74.05 |                 76.2  |                 77.21 | densenet_model_top_20epochs_noaugment_XR_WRIST.h5     |
 
+
+![image](plots/evaluation_accuracy_XR_WRIST.png)
+
+#### Learning curves for best model
 
 ![image](plots/evaluation_accuracy_XR_WRIST.png)
 
