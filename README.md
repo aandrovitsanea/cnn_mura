@@ -78,7 +78,7 @@ In this case each model was trained for all data, in order to identify not only 
 | 111 | resnet_all_parts_deep_augment_50epochs     |                 19.35 |                15.17 |                 19.33 |
 | 112 | resnet_all_parts_no_augment_50epochs       |                 28.13 |                20.61 |                 27.41 |
 
-### per body part
+### Per body part
 
 In this case each classifier is trained for each body part. The tables include the best 4 models per body part in regard to the highest accuracy on the test set.
 
@@ -91,6 +91,7 @@ In this case each classifier is trained for each body part. The tables include t
 |  76 | densenet_no_augment_100epochs   | XR_ELBOW    | 0.001 |            0.2 |                   20 |          100 |                    15 |                75.91 |                 76.69 |                 78.77 | densenet_model_top_100epochs_noaugment_XR_ELBOW.h5    |
 |  96 | inception_deep_augment_70epochs | XR_ELBOW    | 0.001 |          nan   |                   20 |           70 |                    38 |                74.62 |                 77.59 |                 77.2  | inception_model_top_70epochs_deep_augment_XR_ELBOW.h5 |
 |  13 | densenet_no_augment_20epochs    | XR_ELBOW    | 0.001 |          nan   |                   10 |           20 |                    20 |                73.12 |                 74.42 |                 73.31 | densenet_model_top_20epochs_noaugment_XR_ELBOW.h5     |
+
 ![image](plots/evaluation_accuracy_XR_ELBOW.png)
 
 #### Finger
