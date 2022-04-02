@@ -35,11 +35,50 @@ In all cases of the training set the negative/normal condition of the region are
 
 ![image](plots/barplot_per_bodypart_train.png)
 
-More insight to the data can be found in this [notebook](notebooks/EDA.ipynb).
+More insights on the data can be found in this [notebook](notebooks/EDA.ipynb).
 
 ## Architectures
 
+### Base CNN model
+![image](plots/base_model_architecture.png)
+
+### Tranfer learning
+
+#### DenseNet121 + 1 layer GlobalAveragePooling2D/dropout
+![image](plots/densenet121_architecture.png)
+
+#### ResNet152 + 1 layer GlobalAveragePooling2D/dropout
+
+![image](plots/resnet_architecture.png)
+
+#### InceptionV3 + 1 layer GlobalAveragePooling2D/dropout
+
+![image](plots/inception_v3_architecture.png)
+
+#### Xception + 1 layer GlobalAveragePooling2D/dropout
+
+![image](plots/xception_architecture.png)
+
 ## Evaluation
+
+### 14 cls approach
+
+In this case each model was trained for all data, in order to identify not only whether the condition is normal or abnormal but also which body part, out of the 7 given the x-ray refers to.
+
+![image](plots/evaluation_accuracy_one_model_14classesnormal.png)
+
+### per body part
+
+In this case each classifier is trained for each body part.
+
+![image](plots/evaluation_accuracy_XR_ELBOW.png)
+![image](plots/evaluation_accuracy_XR_FINGER.png)
+![image](plots/evaluation_accuracy_XR_FOREARM.png)
+![image](plots/evaluation_accuracy_XR_HAND.png)
+![image](plots/evaluation_accuracy_XR_HUMERUS.png)
+![image](plots/evaluation_accuracy_XR_SHOULDER.png)
+![image](plots/evaluation_accuracy_XR_WRIST.png)
+
 
 
 ## Getting Started
