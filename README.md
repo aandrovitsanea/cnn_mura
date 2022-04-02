@@ -1,8 +1,8 @@
 # X-Ray classification
 
-This project trains and evaluates different CNN architectures with the aim of image classification of the MURA dataset.
+This project trains and evaluates different CNN architectures with the aim of image classification of the MURA dataset downloaded using [this](https://cs.stanford.edu/group/mlgroup/MURA-v1.1.zip) link.
 
-MURA is a dataset of musculoskeletal radiographs consisting of studies from 11,967 patients, with a total of 40,005 multi-view radiographic images. Each belongs to one of seven standard upper extremity radiographic study types: 
+It is a dataset of musculoskeletal radiographs consisting of studies from 11,967 patients, with a total of 40,005 multi-view radiographic images. Each belongs to one of seven standard upper extremity radiographic study types: 
 * elbow, 
 * finger, 
 * forearm, 
