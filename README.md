@@ -104,6 +104,7 @@ In this case each classifier is trained for each body part. The tables include t
 
 ![image](plots/accuracy_densenet_model_top_70epochs_deep_augment_XR_ELBOW.png)
 
+
 ![image](plots/lossdensenet_model_top_70epochs_deep_augment_XR_ELBOW.png)
 
 
