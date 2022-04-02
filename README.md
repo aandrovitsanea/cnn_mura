@@ -72,7 +72,7 @@ In this case each model was trained for all data, in order to identify not only 
 |  84 | xception_all_parts_no_augment_50epochs     |                 69.71 |                64.84 |                 68.95 |
 |  85 | xception_all_parts_deep_augment_50epochs   |                 68.67 |                62.06 |                 67.41 |
 |  86 | densenet_all_parts_deep_augment_50epochs   |                 64.73 |                60.9  |                 65.4  |
-|  87 | densenet_all_parts_no_augment_50epochs     |                 70.56 |                65.71 |                 69.33 |
+|  87 | **densenet_all_parts_no_augment_50epochs**     |                 70.56 |                **65.71** |                 69.33 |
 |  88 | base_model_all_parts_no_augment_50epochs   |                 85.81 |                50.3  |                 56.79 |
 |  89 | base_model_all_parts_deep_augment_50epochs |                 64.1  |                57.12 |                 60.8  |
 | 111 | resnet_all_parts_deep_augment_50epochs     |                 19.35 |                15.17 |                 19.33 |
@@ -82,6 +82,11 @@ In this case each model was trained for all data, in order to identify not only 
 ![image](plots/evaluation_accuracy_one_model_14classesnormal.png)
 
 #### Learning curves for best model
+
+![image](plots/accuracy_densenet_14classes_model_top_fixed_softmax_50epochs_noaugment_.png)
+
+
+![image](plots/lossdensenet_14classes_model_top_fixed_softmax_50epochs_noaugment_.png)
 
 ### Per body part
 
