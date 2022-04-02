@@ -122,7 +122,11 @@ In this case each classifier is trained for each body part. The tables include t
 
 #### Learning curves for best model
 
-![image](plots/evaluation_accuracy_XR_WRIST.png)
+
+![image](plots/accuracy_densenet_model_top__20epochs_noaugment_XR_FINGER.png)
+
+
+![image](plots/lossdensenet_model_top__20epochs_noaugment_XR_FINGER.png)
 
 
 #### Forearm
@@ -138,7 +142,11 @@ In this case each classifier is trained for each body part. The tables include t
 
 #### Learning curves for best model
 
-![image](plots/evaluation_accuracy_XR_WRIST.png)
+
+![image](plots/accuracy_densenet_model_top_70epochs_deep_augment_XR_xx.png)
+
+
+![image](plots/lossdensenet_model_top_70epochs_deep_augment_XR_xx.png)
 
 
 #### Hand
@@ -154,8 +162,11 @@ In this case each classifier is trained for each body part. The tables include t
 
 #### Learning curves for best model
 
-![image](plots/evaluation_accuracy_XR_WRIST.png)
 
+![image](plots/accuracy_densenet_model_top_70epochs_deep_augment_XRxx.png)
+
+
+![image](plots/lossdensenet_model_top_70epochs_deep_augment_XR_xx.png)
 
 #### Humerus
 
@@ -171,8 +182,11 @@ In this case each classifier is trained for each body part. The tables include t
 
 #### Learning curves for best model
 
-![image](plots/evaluation_accuracy_XR_WRIST.png)
 
+![image](plots/accuracy_densenet_model_top_70epochs_deep_augment_XR_HUMERUS.png)
+
+
+![image](plots/lossdensenet_model_top_70epochs_deep_augment_XR_HUMERUS.png)
 
 #### Shoulder
 
@@ -187,7 +201,11 @@ In this case each classifier is trained for each body part. The tables include t
 
 #### Learning curves for best model
 
-![image](plots/evaluation_accuracy_XR_WRIST.png)
+
+![image](plots/accuracy_densenet_model_top_70epochs_deep_augment_XR_ELBOW.png)
+
+
+![image](plots/lossdensenet_model_top_70epochs_deep_augment_XR_ELBOW.png)
 
 
 #### Wrist
@@ -204,7 +222,11 @@ In this case each classifier is trained for each body part. The tables include t
 
 #### Learning curves for best model
 
-![image](plots/evaluation_accuracy_XR_WRIST.png)
+
+![image](plots/accuracy_densenet_model_top_70epochs_deep_augment_XR_ELBOW.png)
+
+
+![image](plots/lossdensenet_model_top_70epochs_deep_augment_XR_ELBOW.png)
 
 
 
