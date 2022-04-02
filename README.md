@@ -1,16 +1,5 @@
 # X-Ray classification
 
-
-## TO-DOS
-
-* Extract metrics
-* Check other architectures
-* Fine tune base model with Keras Tuner
-* Other models for transfer learning
-* Create py files for densenet and resnet models and build them to the notebooks
-* Add cleaned notebooks to repo
-* Write report
-
 This project trains and evaluates different CNN architectures with the aim of image classification of the MURA dataset.
 
 MURA is a dataset of musculoskeletal radiographs consisting of studies from 11,967 patients, with a total of 40,005 multi-view radiographic images. Each belongs to one of seven standard upper extremity radiographic study types: 
@@ -64,7 +53,7 @@ More insights on the data can be found in this [notebook](notebooks/EDA.ipynb).
 
 ### 14 cls approach
 
-In this case each model was trained for all data, in order to identify not only whether the condition is normal or abnormal but also which body part, out of the 7 given the x-ray refers to. Below are the results of all 8 trained models.
+In this case each model was trained for all data, in order to identify not only whether the condition is normal or abnormal but also which body part, out of the 7 given the x-ray refers to. Below are the results of all 8 trained models, in bold the best model in regard to the accuracy on the test set.
 
 
 |     | name_code                                  |   train_accuracy_eval |   test_accuracy_eval |   valid_accuracy_eval|
@@ -82,6 +71,8 @@ In this case each model was trained for all data, in order to identify not only 
 ![image](plots/evaluation_accuracy_one_model_14classesnormal.png)
 
 #### Learning curves for best model
+
+Best model is densenet_all_parts_no_augment_50epochs.
 
 ![image](plots/accuracy_densenet_14classes_model_top_fixed_softmax_50epochs_noaugment_.png)
 
@@ -264,6 +255,8 @@ cd cnn_mura
 ```
 Then either take an ipython shell or open a jupyter notebook in there.
 
+The h5 files of the best models per body part as well as for the whole dataset (14 cls) are included in the repo.
+
 ```
 import lib.prediction as predict
 
@@ -291,6 +284,7 @@ pred = predict.calculate_binary('densenet_model_top_70epochs_deep_augment',
 
 Output: X-ray of XR_HUMERUS is abnormal.
 ``` 
-Only the best model per body part and for all 14 cls are included in the repo. All h5 are available upon request. Just send me an [email](anna.androvitsanea@gmail.com).
+ 
+All .h5 files are available upon request. Just send me an [email](anna.androvitsanea@gmail.com).
 
 
