@@ -51,6 +51,9 @@ More insights on the data can be found in this [notebook](notebooks/EDA.ipynb).
 
 ## Evaluation
 
+All insights on the evaluation of the model can be found in this [notebook](notebooks/Evaluation.ipynb).
+
+
 ### 14 cls approach
 
 In this case each model was trained for all data, in order to identify not only whether the condition is normal or abnormal but also which body part, out of the 7 given the x-ray refers to. Below are the results of all 8 trained models, in bold the best model in regard to the accuracy on the test set.
