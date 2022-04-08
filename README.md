@@ -13,7 +13,7 @@ It is a dataset of musculoskeletal radiographs consisting of studies from 11,967
 
 Each study is manually labeled as **normal** or **abnormal** by radiologists at the time of clinical radiographic interpretation in the diagnostic radiology environment between 2001 and 2012.
 
-The **outcome** of the project is to feed the model with an image of an X-Ray and get as output the whether the patient has a normal or abnormal finding.
+The **outcome** of the project is to feed the model with an image of an X-Ray and get as output the whether the patient has a normal or abnormal X-Ray.
 
 ## Exploratory Data Analysis (EDA)
 
